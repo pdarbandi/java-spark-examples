@@ -21,30 +21,21 @@ public class SparkDataframeCSVDemo {
                                        .getOrCreate();
         }
 
+        // Note how there is no sparkContext here - we use the sparkSession directly
         Dataset<Row> airports = sparkSession.read().option("header", true).csv("data/airports.csv");
 
-        // prints object info only
-        //System.out.println(airports.take(5));
+        // How to know the inferred schema of the csv file and display the first few rows?
 
-        airports.printSchema();
-        airports.show(5);
+        // How to show the number of rows with null in iataCode?
 
-        System.out.println("Empty IATA CODES: " + airports.filter( "iataCode = null").count());
+        // How to print the list of distinct countries
 
-        System.out.println("Distinct Countries: ");
-        airports.select("Country").distinct().show();
+        // cast latitude and longitude to Double
+        // then filter by -23 < latitude < 23
+        // these are airports in the tropics - display the results
 
-        airports.col("latitude").cast("Double").as("latitude");
-        airports.col("longitude").cast("Double").as("longitude");
+        // Group tropical airports by timezone and show how many in each zone
 
-        Dataset<Row> tropAirports = airports.filter("latitude > -23 AND latitude < 23");
-
-        tropAirports.show();
-
-        System.out.println("Trop Airports By Timezone");
-        tropAirports.groupBy("timezoneOlsonFormat").count().show();
-
-        tropAirports.write().parquet("data/tropAirports.parquet");
-        airports.write().parquet("data/airports.parquet");
+        // the list of tropical airports could be saved to any supported store - e.g. parquet on hdfs
     }
 }

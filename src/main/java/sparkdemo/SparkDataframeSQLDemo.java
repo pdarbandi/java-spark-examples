@@ -22,6 +22,7 @@ public class SparkDataframeSQLDemo {
                                        .getOrCreate();
         }
 
+        // just some variable - these would come from configuration or command line arguments
         String jdbcQuery = "select * from country where Continent like \"North%\"";
         String username = "root";
         String password = "c0nygre";
@@ -44,7 +45,12 @@ public class SparkDataframeSQLDemo {
 //        Dataset<Row> countries = sparkSession.read()
 //                                .jdbc(jdbcUrl, "country", jdbcProps);
 
-        countries.printSchema();
-        countries.show(5);
+
+        // What did we just read in?
+        // - check the schema - display the first few rows
+
+        // Experiment with filtering - e.g. which country has the greatest LifeExpectancy?
+
+        // What's the average GNP per Region?
     }
 }

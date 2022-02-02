@@ -33,6 +33,8 @@
         </dependency>
     </dependencies>
 
+    <!-- include the assembly plugin so that the project code AND mysql-connector
+         (and any other dependencies) will be packaged into a single jar to run on a cluter -->
     <build>
         <plugins>
             <plugin>

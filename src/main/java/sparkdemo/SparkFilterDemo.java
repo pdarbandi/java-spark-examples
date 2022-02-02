@@ -17,6 +17,7 @@ public class SparkFilterDemo {
             sparkSession = SparkSession.builder().getOrCreate();
         }
         else {
+            // the validateOutputSpecs=false option allows overwriting of output text files
             sparkSession = SparkSession.builder()
                                        .master("local[1]")
                                        .config("spark.hadoop.validateOutputSpecs", false)
@@ -25,30 +26,25 @@ public class SparkFilterDemo {
 
         JavaSparkContext sc = JavaSparkContext.fromSparkContext(sparkSession.sparkContext());
 
-        List<Integer> numbers = Arrays.asList(4, 5, 6, 7, 8);
-
-        JavaRDD<Integer> numberRdd = sc.parallelize(numbers);
-
-        System.out.println(numberRdd.count());
-
         JavaRDD<String> lines = sc.textFile("data/Macbeth.txt");
 
+        // The number of lines that were read
+        System.out.println("Total Lines:" + lines.count());
+
+        // Filter by lines containing the word "foul"
         System.out.println("Foul Lines = " +
                            lines.filter(line -> line.contains("foul")).count());
 
-        System.out.println("Total Lines:" + lines.count());
+        // How to filter by non-empty lines, split each line by word, AND
+        // count the words in each line
 
-        JavaRDD<Integer> numWords = lines.filter(line -> line.length() > 0)
-                                         .map(line -> line.split(" ").length);
+        // Could we save our new RDD of numbers?
 
-        numWords.saveAsTextFile("data/numWords");
+        // How would we get the total word count?
 
-        System.out.println("totalWords:" + numWords.reduce( (prev, current) -> prev + current));
+        // how many words in the longest line?
 
-        System.out.println("max Words in a line:" + numWords.reduce( (prev, current) -> prev > current ? prev : current));
-
-        System.out.println("Longest Line:\n" + lines.reduce( (prev, current) ->
-                prev.split(" ").length > current.split(" ").length ? prev : current));
+        // How would we find the text of the longest line? (reduce by line length?)
 
         System.out.println("Done");
     }

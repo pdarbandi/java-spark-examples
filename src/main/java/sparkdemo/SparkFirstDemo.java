@@ -8,8 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SparkDemo {
+public class SparkFirstDemo {
 
+    // A demonstration function to demonstrate how a custom mapping is just a regular java function
     public static int countWords(final String line) {
         List<String> words = new ArrayList<String>(Arrays.asList(line.split(" ")));
         words.remove("");
@@ -36,29 +37,6 @@ public class SparkDemo {
         JavaRDD<Integer> numberRdd = sc.parallelize(numbers);
 
         System.out.println(numberRdd.count());
-
-        JavaRDD<String> lines = sc.textFile("data/Macbeth.txt");
-
-        System.out.println("Foul Lines = " +
-                           lines.filter(line -> line.contains("foul")).count());
-
-        System.out.println("Total Lines:" + lines.count());
-
-        /*
-        JavaRDD<Integer> numWords = lines.map(line -> Arrays.stream(line.split(" "))
-                                                        .filter(value -> value.length() > 0)
-                                                        .toArray().length);
-        */
-        JavaRDD<Integer> numWords = lines.map(line -> countWords(line));
-
-        numWords.saveAsTextFile("data/numWords");
-
-        System.out.println("totalWords:" + numWords.reduce( (prev, current) -> prev + current));
-
-        System.out.println("max Words in a line:" + numWords.reduce( (prev, current) -> prev > current ? prev : current));
-
-        System.out.println("Longest Line:\n" + lines.reduce( (prev, current) ->
-                prev.split(" ").length > current.split(" ").length ? prev : current));
 
         System.out.println("Done");
     }

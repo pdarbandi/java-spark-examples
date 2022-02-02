@@ -21,11 +21,13 @@ public class SparkDataframeParqDemo {
                                        .getOrCreate();
         }
 
-        Dataset<Row> airports = sparkSession.read().parquet("data/airports_parquet/");
+        // read data in parquet file(s) from data/airports_parquet directory
 
-        airports.printSchema();
-        airports.show(5);
+        // show the first 10 rows
 
-        System.out.println("Number of airports:" + airports.count());
+        // check the schema?
+
+        // how many airports did we read?
+
     }
 }
