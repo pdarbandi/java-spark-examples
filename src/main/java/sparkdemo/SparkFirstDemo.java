@@ -33,10 +33,22 @@ public class SparkFirstDemo {
         JavaSparkContext sc = JavaSparkContext.fromSparkContext(sparkSession.sparkContext());
 
         List<Integer> numbers = Arrays.asList(4, 5, 6, 7, 8);
-
         JavaRDD<Integer> numberRdd = sc.parallelize(numbers);
 
         System.out.println(numberRdd.count());
+
+        //--------------------------------------------
+
+        JavaRDD<String> linesRdd = sc.textFile("Macbeth.txt");
+
+        System.out.println("Interesting Line:\n" +
+                           linesRdd.filter(line -> line.toLowerCase().contains("damned spot")).count());
+
+        JavaRDD<String> outLines = linesRdd.filter(line -> line.toLowerCase().contains("damned spot"));
+
+        outLines.saveAsTextFile("data/outLines");
+
+        //--------------------------------------------------------
 
         System.out.println("Done");
     }
